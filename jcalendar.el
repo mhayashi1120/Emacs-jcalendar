@@ -1,9 +1,14 @@
 ;;; -*- Coding: iso-2022-7bit -*-
 
 
-;; japanese-holidays.el
-;; koyomi.el
-;; http://www.kmc.gr.jp/~tak/sources/el/#koyomi
+;;; Usage:
+;
+;; jcalendar.el referenced following elisp libraries
+;;
+;; * japanese-holidays.el
+;; * koyomi.el
+;;   http://www.kmc.gr.jp/~tak/sources/el/#koyomi
+;;
 
 (eval-when-compile
   (require 'cl))
@@ -23,65 +28,65 @@
 
 (defvar jcalendar-general-holidays
   '(
-    (holiday-fixed  1  1  "元日")
+    (holiday-fixed  1  1  "$B85F|(B")
     (cond
      ;;todo
      ((or (>= displayed-year 2000)
 	  (and (= displayed-year 1999) (> displayed-month 6)))
-      (holiday-float 1 1 2 "成人の日"))
+      (holiday-float 1 1 2 "$B@.?M$NF|(B"))
      (t
-      (holiday-fixed 1 15 "成人の日")))
-    (holiday-fixed  2 11  "建国記念の日")
+      (holiday-fixed 1 15 "$B@.?M$NF|(B")))
+    (holiday-fixed  2 11  "$B7z9q5-G0$NF|(B")
     (cond 
      ((<= displayed-year 1988)
-      (holiday-fixed 12 23  "天皇誕生日"))
+      (holiday-fixed 12 23  "$BE79DCB@8F|(B"))
      ((and (> displayed-year 1988) (< displayed-year 2007))
-      (holiday-fixed  4 29  "みどりの日"))
+      (holiday-fixed  4 29  "$B$_$I$j$NF|(B"))
      (t
-      (holiday-fixed  4 29  "昭和の日")))
-    (holiday-fixed  5  3  "憲法記念日")
+      (holiday-fixed  4 29  "$B><OB$NF|(B")))
+    (holiday-fixed  5  3  "$B7{K!5-G0F|(B")
     (cond
      ((and (> (calendar-day-of-week (list 5 4 displayed-year)) 0)
 	   (>= displayed-year 1985)
 	   (< displayed-year 2007))
       ;; if same as sunday then normalday...
-      (holiday-fixed 5 4 "国民の休日"))
+      (holiday-fixed 5 4 "$B9qL1$N5YF|(B"))
      ((>= displayed-year 2007)
-      (holiday-fixed 5 4 "みどりの日")))
-    (holiday-fixed  5  5  "こどもの日")
+      (holiday-fixed 5 4 "$B$_$I$j$NF|(B")))
+    (holiday-fixed  5  5  "$B$3$I$b$NF|(B")
     (cond
      ((memq displayed-year '(2008 2009))
-      (holiday-fixed 5 6 "振替休日")))
+      (holiday-fixed 5 6 "$B?6BX5YF|(B")))
     (cond
      ((and (>= displayed-year 1996) (< displayed-year 2003))
-      (holiday-fixed  7 20  "海の日"))
+      (holiday-fixed  7 20  "$B3$$NF|(B"))
      ((>= displayed-year 2003)
-      (holiday-float  7 1 3  "海の日")))
+      (holiday-float  7 1 3  "$B3$$NF|(B")))
     (cond
      ((>= displayed-year 2003)
-      (holiday-float  9 1 3  "敬老の日"))
+      (holiday-float  9 1 3  "$B7IO7$NF|(B"))
      (t
-      (holiday-fixed  9 15  "敬老の日")))
+      (holiday-fixed  9 15  "$B7IO7$NF|(B")))
     (cond
      ((>= displayed-year 2000)
-      (holiday-float 10 1 2 "体育の日"))
+      (holiday-float 10 1 2 "$BBN0i$NF|(B"))
      (t
-      (holiday-fixed 10 10 "体育の日")))
-    (holiday-fixed 11  3  "文化の日")
-    (holiday-fixed 11 23  "勤労感謝の日")
+      (holiday-fixed 10 10 "$BBN0i$NF|(B")))
+    (holiday-fixed 11  3  "$BJ82=$NF|(B")
+    (holiday-fixed 11 23  "$B6PO+46<U$NF|(B")
     (cond 
      ((> displayed-year 1988)
-      (holiday-fixed 12 23  "天皇誕生日")))
+      (holiday-fixed 12 23  "$BE79DCB@8F|(B")))
     (if (memq displayed-month '(2 3 4 8 9 10))
 	(solar-equinoxes-solstices))
     ;; temporary holiday
     (cond
      ((= displayed-year 1989)
-      (holiday-fixed 2 24 "昭和天皇の大喪の礼"))
+      (holiday-fixed 2 24 "$B><OBE79D$NBgAS$NNi(B"))
      ((= displayed-year 1990)
-      (holiday-fixed 11 12 "即位礼正殿の儀"))
+      (holiday-fixed 11 12 "$BB(0LNi@5EB$N57(B"))
      ((= displayed-year 1993)
-      (holiday-fixed 6 9 "皇太子徳仁親王の結婚の儀")))
+      (holiday-fixed 6 9 "$B9DB@;RFA?N?F2&$N7k:'$N57(B")))
     ;; exchange workday for holiday
     (when (not (boundp 'called-recursively))
       (let* (called-recursively
@@ -101,29 +106,29 @@
 	       (setq mmday (calendar-gregorian-from-absolute
 			    (1+ (calendar-absolute-from-gregorian holiday))))
 	       (null (check-calendar-holidays mmday))
-	       (setq ret (cons (list mmday "振替休日") ret)))
+	       (setq ret (cons (list mmday "$B?6BX5YF|(B") ret)))
 	  (setq holiday-list (cdr holiday-list)))
 	ret))))
 
 (defconst jcalendar--rikuyou
-  ["大安" "赤口" "先勝" "友引" "先負" "仏滅"])
+  ["$BBg0B(B" "$B@V8}(B" "$B@h>!(B" "$BM'0z(B" "$B@hIi(B" "$BJ)LG(B"])
 
 (defconst jcalendar--era
   '(
-    ("明治" ( 1 25 1868))
-    ("大正" ( 7 30 1912))
-    ("昭和" (12 25 1926))
-    ("平成" ( 1  8 1989))
+    ("$BL@<#(B" ( 1 25 1868))
+    ("$BBg@5(B" ( 7 30 1912))
+    ("$B><OB(B" (12 25 1926))
+    ("$BJ?@.(B" ( 1  8 1989))
     ))
 
 ;; overwrite the default value.
 (setq solar-n-hemi-seasons
-      '("春分の日" "夏至" "秋分の日" "冬至"))
+      '("$B=UJ,$NF|(B" "$B2F;j(B" "$B=)J,$NF|(B" "$BE_;j(B"))
 
 (defun jcalendar-fixed-furikae-holiday (m d s)
   (append (holiday-fixed m d s)
 	  (and (= (calendar-day-of-week (list m d displayed-year)) 0)
-	       (holiday-fixed m (1+ d) "振替休日"))))
+	       (holiday-fixed m (1+ d) "$B?6BX5YF|(B"))))
 
 (defun jcalendar-mark-saturday ()
   (jcalendar-mark-displayed-calendar
@@ -251,32 +256,32 @@ See `jcalendar-special-days'"
          (qreki (jcalendar--qreki date))
          (absolute (calendar-absolute-from-gregorian date)))
     (concat
-     (format "和暦: %s%s年"
+     (format "$BOBNq(B: %s%s$BG/(B"
              (nth 0 era)
              (jcalendar-number-to-kanji 
               (1+ (- year (calendar-extract-year (nth 1 era))))))
      (let* ((m (calendar-extract-month qreki))
             (d (calendar-extract-day qreki)))
-       (format ", 旧暦: %s%s月%s日, 六曜: %s" 
-               (or (and (nth 3 qreki) "閏") "")
+       (format ", $B5lNq(B: %s%s$B7n(B%s$BF|(B, $BO;MK(B: %s" 
+               (or (and (nth 3 qreki) "$B1<(B") "")
                (jcalendar-number-to-kanji m)
                (jcalendar-number-to-kanji d)
                (aref jcalendar--rikuyou (% (+ m d) 6))))
      (let ((sekku (jcalendar--sekku qreki)))
        (and sekku
-            (format ", 節供: %s" sekku)))
-     (let ((sekki (jcalendar--節気 absolute)))
+            (format ", $B@a6!(B: %s" sekku)))
+     (let ((sekki (jcalendar--$B@a5$(B absolute)))
        (and sekki
-            (format ", 節気: %s" sekki)))
-     (format ", 十干: %s"
-             (jcalendar--date-六十干支 absolute)))))
+            (format ", $B@a5$(B: %s" sekki)))
+     (format ", $B==43(B: %s"
+             (jcalendar--date-$BO;==43;Y(B absolute)))))
 
-;; m1 は date 月の朔 m2 は date の次の朔
+;; m1 $B$O(B date $B7n$N:s(B m2 $B$O(B date $B$N<!$N:s(B
 ;;
 ;; m1 ------------ m2 --------------
 ;; |      date    |
 
-;; m2 - m1 は 29 or 30
+;; m2 - m1 $B$O(B 29 or 30
 
 (defun jcalendar--qreki (date)
   (let* ((absolute (calendar-absolute-from-gregorian date))
@@ -284,13 +289,13 @@ See `jcalendar-special-days'"
          (m2 (lunar-new-moon-on-or-after astro))
          m1)
     (if (= (floor absolute) (floor (calendar-absolute-from-astro m2)))
-        ;; 引数 date が朔
+        ;; $B0z?t(B date $B$,:s(B
         (setq m1 m2
               m2 (lunar-new-moon-on-or-after (1+ astro)))
       (setq m1 (lunar-new-moon-on-or-after (- astro 29)))
       (when (= (floor m1) (floor m2))
         (setq m1 (lunar-new-moon-on-or-after (- astro 30)))))
-    ;; m1, m2 を日単位まで切り捨てる
+    ;; m1, m2 $B$rF|C10L$^$G@Z$j<N$F$k(B
     (let* ((saku (floor (calendar-absolute-from-astro m1)))
            (next-saku (floor (calendar-absolute-from-astro m2)))
            (longitude (solar-date-next-longitude (calendar-astro-from-absolute saku) 30))
@@ -299,15 +304,15 @@ See `jcalendar-special-days'"
            (day (floor (- absolute saku))))
       (list (1+ month) (1+ day) nil leap))))
 
-(defconst jcalendar--節供
-  '(("元日" 1 1)
-    ("人日 (七草の節供)" 1 7)
-    ("小正月" 1 15)
-    ("上巳 (桃の節供 雛祭)" 3 3)
-    ("端午 (菖蒲の節供)" 5 5)
-    ("七夕" 7 7)
-    ("盆" 7 15)
-    ("重陽 (菊の節供)" 9 9)))
+(defconst jcalendar--$B@a6!(B
+  '(("$B85F|(B" 1 1)
+    ("$B?MF|(B ($B<7Ap$N@a6!(B)" 1 7)
+    ("$B>.@57n(B" 1 15)
+    ("$B>eL&(B ($BEm$N@a6!(B $B?w:W(B)" 3 3)
+    ("$BC<8a(B ($B>T3w$N@a6!(B)" 5 5)
+    ("$B<7M<(B" 7 7)
+    ("$BK_(B" 7 15)
+    ("$B=EM[(B ($B5F$N@a6!(B)" 9 9)))
 
 (defun jcalendar--sekku (qreki)
   (let ((m (calendar-extract-month qreki))
@@ -317,45 +322,45 @@ See `jcalendar-special-days'"
       (car (find-if 
             (lambda (x) (and (= (nth 1 x) m)
                              (= (nth 2 x) d)))
-            jcalendar--節供)))))
+            jcalendar--$B@a6!(B)))))
 
-(defconst jcalendar--五行
-  ["木" "火" "土" "金" "水"])
+(defconst jcalendar--$B8^9T(B
+  ["$BLZ(B" "$B2P(B" "$BEZ(B" "$B6b(B" "$B?e(B"])
 
-(defconst jcalendar--十二支 
-  ["子" "丑" "寅" "卯" "辰" "巳"
-   "午" "未" "申" "酉" "戌" "亥"])
+(defconst jcalendar--$B==Fs;Y(B 
+  ["$B;R(B" "$B1/(B" "$BFR(B" "$B1,(B" "$BC$(B" "$BL&(B"
+   "$B8a(B" "$BL$(B" "$B?=(B" "$BFS(B" "$BX|(B" "$B0g(B"])
 
-(defconst jcalendar--十干 
-  ["甲" "乙" "丙" "丁" "戊" "己" "庚" "辛" "壬" "癸"])
+(defconst jcalendar--$B==43(B 
+  ["$B9C(B" "$B25(B" "$BJ:(B" "$BCz(B" "$BJj(B" "$B8J(B" "$B9.(B" "$B?I(B" "$B?Q(B" "$Bb#(B"])
 
-(defun jcalendar--六十干支 (n)
-  "N の六十干支を返す。"
-  (let ((十干 (% n 10))
-	(十二支 (% n 12)))
+(defun jcalendar--$BO;==43;Y(B (n)
+  "N $B$NO;==43;Y$rJV$9!#(B"
+  (let (($B==43(B (% n 10))
+	($B==Fs;Y(B (% n 12)))
     (concat 
-     (aref jcalendar--十干  十干) 
-     (aref jcalendar--十二支 十二支))))
+     (aref jcalendar--$B==43(B  $B==43(B) 
+     (aref jcalendar--$B==Fs;Y(B $B==Fs;Y(B))))
 
-(defun jcalendar--date-六十干支 (absolute)
-  "ABSOLUTE (修正ユリウス通日) の六十干支を返す。"
-  (jcalendar--六十干支 (+ absolute 14)))
+(defun jcalendar--date-$BO;==43;Y(B (absolute)
+  "ABSOLUTE ($B=$@5%f%j%&%9DLF|(B) $B$NO;==43;Y$rJV$9!#(B"
+  (jcalendar--$BO;==43;Y(B (+ absolute 14)))
 
-;;TODO いくらなんでもいらなくね？
-(defun jcalendar--year-六十干支 (year)
-  "YEAR (西暦) の六十干支を返す。"
-  (jcalendar--六十干支 (+ year 56)))
+;;TODO $B$$$/$i$J$s$G$b$$$i$J$/$M!)(B
+(defun jcalendar--year-$BO;==43;Y(B (year)
+  "YEAR ($B@>Nq(B) $B$NO;==43;Y$rJV$9!#(B"
+  (jcalendar--$BO;==43;Y(B (+ year 56)))
 
-(defconst jcalendar--二十四節気
-  ["春分" "清明" "穀雨" "立夏" "小満" "芒種"
-   "夏至" "小暑" "大暑" "立秋" "処暑" "白露"
-   "秋分" "寒露" "霜降" "立冬" "小雪" "大雪"
-   "冬至" "小寒" "大寒" "立春" "雨水" "啓蟄" ])
+(defconst jcalendar--$BFs==;M@a5$(B
+  ["$B=UJ,(B" "$B@6L@(B" "$B9r1+(B" "$BN)2F(B" "$B>.K~(B" "$Bgj<o(B"
+   "$B2F;j(B" "$B>.=k(B" "$BBg=k(B" "$BN)=)(B" "$B=h=k(B" "$BGrO*(B"
+   "$B=)J,(B" "$B4(O*(B" "$BAz9_(B" "$BN)E_(B" "$B>.@c(B" "$BBg@c(B"
+   "$BE_;j(B" "$B>.4((B" "$BBg4((B" "$BN)=U(B" "$B1+?e(B" "$B7<j/(B" ])
 
-(defun jcalendar--節気-1 (jd longitude &optional mod90)
-  "JD (ユリウス通日) が太陽黄経 LONGITUDE を通るとき t を返す。
+(defun jcalendar--$B@a5$(B-1 (jd longitude &optional mod90)
+  "JD ($B%f%j%&%9DLF|(B) $B$,B@M[2+7P(B LONGITUDE $B$rDL$k$H$-(B t $B$rJV$9!#(B
 
-`jcalendar--節気' のサブルーチン。"
+`jcalendar--$B@a5$(B' $B$N%5%V%k!<%A%s!#(B"
   (let ((today (solar-longitude jd))
 	(tomorrow (solar-longitude (1+ jd))))
     (if mod90
@@ -364,11 +369,11 @@ See `jcalendar-special-days'"
     (and (<= (if (< today tomorrow) today (- today (if mod90 90 360))) longitude)
 	 (< longitude tomorrow))))
 
-(defun jcalendar--節気 (absolute)
-  "ABSOLUTE (修正ユリウス通日) が節気に相当する場合はそれを返す。
+(defun jcalendar--$B@a5$(B (absolute)
+  "ABSOLUTE ($B=$@5%f%j%&%9DLF|(B) $B$,@a5$$KAjEv$9$k>l9g$O$=$l$rJV$9!#(B
 
-節気以外にも、太陽黄経から求められる雑節などの暦日があれば返す。
-該当する暦日がなければ nil を返す。"
+$B@a5$0J30$K$b!"B@M[2+7P$+$i5a$a$i$l$k;(@a$J$I$NNqF|$,$"$l$PJV$9!#(B
+$B3:Ev$9$kNqF|$,$J$1$l$P(B nil $B$rJV$9!#(B"
   (let* ((astro (calendar-astro-from-absolute (floor absolute)))
 	 (today (solar-longitude astro))
 	 (tomorrow (solar-longitude (1+ astro)))
@@ -376,47 +381,47 @@ See `jcalendar-special-days'"
 	 (today-90 (mod today 90)))
     (cond ((and (<= today (* index 15))
 		(< (* index 15) (if (> today tomorrow) (+ 360 tomorrow) tomorrow)))
-	   (aref jcalendar--二十四節気 (% index 24)))
-	  ((and (<= today  80) (<  80 tomorrow)) "入梅")
-	  ((and (<= today 100) (< 100 tomorrow)) "半夏生")
-	  ((and (<  40 today) (< today  45) (jcalendar--節気-1 (- astro  87) 315))
-	   "八十八夜")
-	  ((and (< 155 today) (< today 165) (jcalendar--節気-1 (- astro 209) 315))
-	   "二百十日")
-	  ((and (< 165 today) (< today 175) (jcalendar--節気-1 (- astro 219) 315))
-	   "二百二十日")
+	   (aref jcalendar--$BFs==;M@a5$(B (% index 24)))
+	  ((and (<= today  80) (<  80 tomorrow)) "$BF~G_(B")
+	  ((and (<= today 100) (< 100 tomorrow)) "$BH>2F@8(B")
+	  ((and (<  40 today) (< today  45) (jcalendar--$B@a5$(B-1 (- astro  87) 315))
+	   "$BH,==H,Lk(B")
+	  ((and (< 155 today) (< today 165) (jcalendar--$B@a5$(B-1 (- astro 209) 315))
+	   "$BFsI4==F|(B")
+	  ((and (< 165 today) (< today 175) (jcalendar--$B@a5$(B-1 (- astro 219) 315))
+	   "$BFsI4Fs==F|(B")
 	  ((and (or (< today 5)
 		    (and (< 180 today) (< today 185)))
 		(cond ((< 175 (mod (solar-longitude (- astro 2)) 180))
-		       "彼岸")
+		       "$BH`4_(B")
 		      ((< 175 (mod (solar-longitude (- astro 3)) 180))
-		       "彼岸明け"))))
+		       "$BH`4_L@$1(B"))))
 	  ((and (or (and (< 175 today) (< today 180))
 		    (< 355 today))
 		(cond ((< (mod (solar-longitude (+ astro 3)) 180) 5)
-		       "彼岸")
+		       "$BH`4_(B")
 		      ((< (mod (solar-longitude (+ astro 4)) 180) 5)
-		       "彼岸入り"))))
-	  ;; 現在では、土用として「立[春夏秋冬]の直前18日間」よりも
-	  ;; 「太陽が黄経 (90n + 27)°を通過する日から立[春夏秋冬]の前日まで」
-	  ;; という定義が一般に用いられているようだ
-	  ;;((and (< 25 today-90) (< today-90 30) (jcalendar--節気-1 (+ astro 18) 45 t))
-	  ;; "土用")
-	  ((and (<= today-90 27) (< 27 (mod tomorrow 90))) "土用入り")
+		       "$BH`4_F~$j(B"))))
+	  ;; $B8=:_$G$O!"EZMQ$H$7$F!VN)(B[$B=U2F=)E_(B]$B$ND>A0(B18$BF|4V!W$h$j$b(B
+	  ;; $B!VB@M[$,2+7P(B (90n + 27)$B!k$rDL2a$9$kF|$+$iN)(B[$B=U2F=)E_(B]$B$NA0F|$^$G!W(B
+	  ;; $B$H$$$&Dj5A$,0lHL$KMQ$$$i$l$F$$$k$h$&$@(B
+	  ;;((and (< 25 today-90) (< today-90 30) (jcalendar--$B@a5$(B-1 (+ astro 18) 45 t))
+	  ;; "$BEZMQ(B")
+	  ((and (<= today-90 27) (< 27 (mod tomorrow 90))) "$BEZMQF~$j(B")
 	  ((and (< 27 today-90) (< today-90 45))
-	   (if (and (< 43 today-90) (jcalendar--節気-1 (1+ astro) 45 t))
-	       "節分"
-	     "土用")))))
+	   (if (and (< 43 today-90) (jcalendar--$B@a5$(B-1 (1+ astro) 45 t))
+	       "$B@aJ,(B"
+	     "$BEZMQ(B")))))
 
-(defconst jcalendar--漢数字 [nil ?一 ?二 ?三 ?四 ?五 ?六 ?七 ?八 ?九])
-(defconst jcalendar--漢数字-位 [nil ?十 ?百 ?千])
-(defconst jcalendar--漢数字-位2 [nil ?万 ?億 ?兆 ?京])
+(defconst jcalendar--$B4A?t;z(B [nil ?$B0l(B ?$BFs(B ?$B;0(B ?$B;M(B ?$B8^(B ?$BO;(B ?$B<7(B ?$BH,(B ?$B6e(B])
+(defconst jcalendar--$B4A?t;z(B-$B0L(B [nil ?$B==(B ?$BI4(B ?$B@i(B])
+(defconst jcalendar--$B4A?t;z(B-$B0L(B2 [nil ?$BK|(B ?$B2/(B ?$BC{(B ?$B5~(B])
 
 (defun jcalendar-number-to-kanji (number)
   (when (minusp number)
     (signal 'args-out-of-range (list number)))
   (if (zerop number)
-      "零"
+      "$BNm(B"
     (loop with res 
           with n1 = number
           for d1 in '(8 4 0)
@@ -428,9 +433,9 @@ See `jcalendar-special-days'"
                        for d2 downfrom 3 to 0
                        do (let* ((base (expt 10 d2))
                                  (n (/ n2 base))
-                                 (digit (aref jcalendar--漢数字 n)))
+                                 (digit (aref jcalendar--$B4A?t;z(B n)))
                             (when digit
-                              (let* ((geta (aref jcalendar--漢数字-位 d2))
+                              (let* ((geta (aref jcalendar--$B4A?t;z(B-$B0L(B d2))
                                      (keta (cond
                                             ((and (= n 1) (>= d2 1))
                                              (when geta
@@ -441,13 +446,13 @@ See `jcalendar-special-days'"
                                              (list digit)))))
                                 (setq res (append keta res))))
                             (setq n2 (% n2 base))))
-                 (let ((geta (aref jcalendar--漢数字-位2 i)))
+                 (let ((geta (aref jcalendar--$B4A?t;z(B-$B0L(B2 i)))
                    (when geta
                      (setq res (cons geta res)))))
                (setq n1 (% n1 base)))
           finally return (concat (nreverse res)))))
 
-;; TODO ひのととか
+;; TODO $B$R$N$H$H$+(B
 
 ;;
 ;; inner functions
