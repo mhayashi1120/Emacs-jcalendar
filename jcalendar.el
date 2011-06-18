@@ -1,14 +1,9 @@
 ;;; -*- Coding: iso-2022-7bit -*-
 
 
-;;; Usage:
-;
-;; jcalendar.el referenced following elisp libraries
-;;
-;; * japanese-holidays.el
-;; * koyomi.el
-;;   http://www.kmc.gr.jp/~tak/sources/el/#koyomi
-;;
+;; japanese-holidays.el
+;; koyomi.el
+;; http://www.kmc.gr.jp/~tak/sources/el/#koyomi
 
 (eval-when-compile
   (require 'cl))
@@ -427,7 +422,8 @@ See `jcalendar-special-days'"
           for d1 in '(8 4 0)
           for i downfrom 2
           do (let* ((base (expt 10 d1))
-                    (n (/ n1 base)))
+                    ;; trick
+                    (n (if (> base 0) (/ n1 base) 0)))
                (when (> n 0)
                  (loop with n2 = n
                        for d2 downfrom 3 to 0
