@@ -1,9 +1,16 @@
 ;;; -*- Coding: iso-2022-7bit -*-
 
 
+;;; Commentary:
+;;
+;; 参考にした elisp ライブラリ
 ;; japanese-holidays.el
 ;; koyomi.el
 ;; http://www.kmc.gr.jp/~tak/sources/el/#koyomi
+
+;;; TODO:
+;; 節供、節気の一覧
+;;
 
 (eval-when-compile
   (require 'cl))
@@ -44,7 +51,7 @@
      ((and (> (calendar-day-of-week (list 5 4 displayed-year)) 0)
 	   (>= displayed-year 1985)
 	   (< displayed-year 2007))
-      ;; if same as sunday then normalday...
+      ;; もし日曜日だったら平日
       (holiday-fixed 5 4 "国民の休日"))
      ((>= displayed-year 2007)
       (holiday-fixed 5 4 "みどりの日")))
@@ -74,7 +81,7 @@
       (holiday-fixed 12 23  "天皇誕生日")))
     (if (memq displayed-month '(2 3 4 8 9 10))
 	(solar-equinoxes-solstices))
-    ;; temporary holiday
+    ;; 一時的な休日
     (cond
      ((= displayed-year 1989)
       (holiday-fixed 2 24 "昭和天皇の大喪の礼"))
@@ -108,15 +115,243 @@
 (defconst jcalendar--rikuyou
   ["大安" "赤口" "先勝" "友引" "先負" "仏滅"])
 
+;;TODO 北朝
+;; 明治の開始など和暦日付が突然別系統の暦に変わったときなど
 (defconst jcalendar--era
   '(
+    ("大化" (2 5 645))
+    ("白雉" (2 9 650))
+    ("朱鳥" (2 2 686))
+    ("大宝" (2 17 701))
+    ("慶雲" (2 14 704))
+    ("和銅" (2 1 708))
+    ("霊亀" (2 13 715))
+    ("養老" (1 21 717))
+    ("神亀" (2 4 724))
+    ("天平" (2 7 729))
+    ("天平感宝" (1 27 749))
+    ("天平勝宝" (1 27 749))
+    ("天平宝字" (1 29 757))
+    ("天平神護" (1 30 765))
+    ("神護景雲" (2 8 767))
+    ("宝亀" (2 5 770))
+    ("天応" (2 2 781))
+    ("延暦" (1 22 782))
+    ("大同" (1 28 806))
+    ("弘仁" (2 12 810))
+    ("天長" (2 8 824))
+    ("承和" (2 16 834))
+    ("嘉祥" (2 13 848))
+    ("仁寿" (2 9 851))
+    ("斉衡" (2 5 854))
+    ("天安" (2 3 857))
+    ("貞観" (2 11 859))
+    ("元慶" (1 22 877))
+    ("仁和" (1 24 885))
+    ("寛平" (2 8 889))
+    ("昌泰" (1 30 898))
+    ("延喜" (1 28 901))
+    ("延長" (1 25 923))
+    ("承平" (1 27 931))
+    ("天慶" (2 8 938))
+    ("天暦" (1 30 947))
+    ("天徳" (2 8 957))
+    ("応和" (1 24 961))
+    ("康保" (1 23 964))
+    ("安和" (2 6 968))
+    ("天禄" (2 14 970))
+    ("天延" (2 11 973))
+    ("貞元" (2 8 976))
+    ("天元" (2 15 978))
+    ("永観" (1 22 983))
+    ("寛和" (1 29 985))
+    ("永延" (2 6 987))
+    ("永祚" (2 14 989))
+    ("正暦" (2 3 990))
+    ("長徳" (2 8 995))
+    ("長保" (1 25 999))
+    ("寛弘" (1 30 1004))
+    ("長和" (2 1 1012))
+    ("寛仁" (2 6 1017))
+    ("治安" (1 22 1021))
+    ("万寿" (2 18 1024))
+    ("長元" (2 4 1028))
+    ("長暦" (1 25 1037))
+    ("長久" (1 23 1040))
+    ("寛徳" (2 8 1044))
+    ("永承" (2 15 1046))
+    ("天喜" (1 29 1053))
+    ("康平" (2 2 1058))
+    ("治暦" (2 14 1065))
+    ("延久" (2 1 1069))
+    ("承保" (2 5 1074))
+    ("承暦" (2 2 1077))
+    ("永保" (2 18 1081))
+    ("応徳" (2 15 1084))
+    ("寛治" (2 12 1087))
+    ("嘉保" (1 25 1094))
+    ("永長" (2 3 1096))
+    ("承徳" (1 22 1097))
+    ("康和" (1 30 1099))
+    ("長治" (2 5 1104))
+    ("嘉承" (2 13 1106))
+    ("天仁" (1 22 1108))
+    ("天永" (1 29 1110))
+    ("永久" (1 26 1113))
+    ("元永" (1 31 1118))
+    ("保安" (2 8 1120))
+    ("天治" (1 25 1124))
+    ("大治" (2 1 1126))
+    ("天承" (2 7 1131))
+    ("長承" (1 27 1132))
+    ("保延" (1 23 1135))
+    ("永治" (2 16 1141))
+    ("康治" (2 5 1142))
+    ("天養" (2 13 1144))
+    ("久安" (2 1 1145))
+    ("仁平" (1 27 1151))
+    ("久寿" (1 23 1154))
+    ("保元" (1 31 1156))
+    ("平治" (1 28 1159))
+    ("永暦" (2 16 1160))
+    ("応保" (2 4 1161))
+    ("長寛" (2 12 1163))
+    ("永万" (1 21 1165))
+    ("仁安" (2 9 1166))
+    ("嘉応" (2 6 1169))
+    ("承安" (2 14 1171))
+    ("安元" (1 31 1175))
+    ("治承" (2 8 1177))
+    ("養和" (1 24 1181))
+    ("寿永" (2 12 1182))
+    ("元暦" (1 22 1184))
+    ("文治" (2 9 1185))
+    ("建久" (2 13 1190))
+    ("正治" (2 4 1199))
+    ("建仁" (2 12 1201))
+    ("元久" (2 10 1204))
+    ("建永" (2 17 1206))
+    ("承元" (2 6 1207))
+    ("建暦" (1 23 1211))
+    ("建保" (1 31 1213))
+    ("承久" (1 25 1219))
+    ("貞応" (1 21 1222))
+    ("元仁" (1 29 1224))
+    ("嘉禄" (2 16 1225))
+    ("安貞" (1 26 1227))
+    ("寛喜" (2 3 1229))
+    ("貞永" (1 31 1232))
+    ("天福" (2 18 1233))
+    ("文暦" (2 7 1234))
+    ("嘉禎" (1 27 1235))
+    ("暦仁" (1 25 1238))
+    ("延応" (2 13 1239))
+    ("仁治" (2 2 1240))
+    ("寛元" (1 29 1243))
+    ("宝治" (2 14 1247))
+    ("建長" (1 22 1249))
+    ("康元" (2 5 1256))
+    ("正嘉" (1 24 1257))
+    ("正元" (2 1 1259))
+    ("文応" (1 21 1260))
+    ("弘長" (2 8 1261))
+    ("文永" (2 7 1264))
+    ("建治" (2 5 1275))
+    ("弘安" (2 1 1278))
+    ("正応" (2 10 1288))
+    ("永仁" (2 15 1293))
+    ("正安" (2 9 1299))
+    ("乾元" (2 7 1302))
+    ("嘉元" (1 27 1303))
+    ("徳治" (1 23 1306))
+    ("延慶" (2 1 1308))
+    ("応長" (1 28 1311))
+    ("正和" (2 16 1312))
+    ("文保" (1 22 1317))
+    ("元応" (1 30 1319))
+    ("元亨" (2 6 1321))
+    ("正中" (2 4 1324))
+    ("嘉暦" (2 11 1326))
+    ("元徳" (2 8 1329))
+    ("元弘(南朝)" (2 16 1331))
+    ("建武(南朝)" (2 13 1334))
+    ("延元(南朝)" (1 23 1336))
+    ("興国(南朝)" (2 7 1340))
+    ("正平(南朝)" (1 31 1346))
+    ("建徳(南朝)" (2 5 1370))
+    ("文中(南朝)" (2 13 1372))
+    ("天授(南朝)" (2 9 1375))
+    ("弘和(南朝)" (2 3 1381))
+    ("元中(南朝)" (1 31 1384))
+    ("応永" (2 9 1394))
+    ("正長" (1 26 1428))
+    ("永享" (2 13 1429))
+    ("嘉吉" (2 1 1441))
+    ("文安" (1 29 1444))
+    ("宝徳" (2 2 1449))
+    ("享徳" (1 31 1452))
+    ("康正" (1 27 1455))
+    ("長禄" (2 4 1457))
+    ("寛正" (2 2 1460))
+    ("文正" (1 26 1466))
+    ("応仁" (2 14 1467))
+    ("文明" (1 22 1469))
+    ("長享" (2 3 1487))
+    ("延徳" (2 10 1489))
+    ("明応" (2 7 1492))
+    ("文亀" (1 29 1501))
+    ("永正" (1 27 1504))
+    ("大永" (2 17 1521))
+    ("享禄" (2 1 1528))
+    ("天文" (2 16 1532))
+    ("弘治" (2 2 1555))
+    ("永禄" (1 30 1558))
+    ("元亀" (2 15 1570))
+    ("天正" (2 12 1573))
+    ("文禄" (2 13 1592))
+    ("慶長" (1 29 1596))
+    ("元和" (1 29 1615))
+    ("寛永" (2 19 1624))
+    ("正保" (2 8 1644))
+    ("慶安" (1 25 1648))
+    ("承応" (2 10 1652))
+    ("明暦" (2 6 1655))
+    ("万治" (2 2 1658))
+    ("寛文" (1 30 1661))
+    ("延宝" (2 17 1673))
+    ("天和" (2 18 1681))
+    ("貞享" (2 15 1684))
+    ("元禄" (2 2 1688))
+    ("宝永" (2 5 1704))
+    ("正徳" (2 17 1711))
+    ("享保" (1 25 1716))
+    ("元文" (2 12 1736))
+    ("寛保" (2 16 1741))
+    ("延享" (2 14 1744))
+    ("寛延" (1 30 1748))
+    ("宝暦" (1 27 1751))
+    ("明和" (2 2 1764))
+    ("安永" (2 4 1772))
+    ("天明" (1 24 1781))
+    ("寛政" (1 26 1789))
+    ("享和" (2 13 1801))
+    ("文化" (2 11 1804))
+    ("文政" (2 5 1818))
+    ("天保" (1 25 1830))
+    ("弘化" (2 18 1844))
+    ("嘉永" (2 5 1848))
+    ("安政" (1 29 1854))
+    ("万延" (1 23 1860))
+    ("文久" (2 10 1861))
+    ("元治" (2 8 1864))
+    ("慶応" (1 27 1865))
     ("明治" ( 1 25 1868))
     ("大正" ( 7 30 1912))
     ("昭和" (12 25 1926))
     ("平成" ( 1  8 1989))
     ))
 
-;; overwrite the default value.
+;; 日本語名で上書き
 (setq solar-n-hemi-seasons
       '("春分の日" "夏至" "秋分の日" "冬至"))
 
@@ -213,7 +448,7 @@ See `jcalendar-special-days'"
   :group 'diary)
 
 (defcustom jcalendar-special-days nil
-  "*"
+  "*todo"
   :group 'jcalendar)
 
 (defun jcalendar--date-to-era (date)
@@ -245,16 +480,23 @@ See `jcalendar-special-days'"
   (let ((date (calendar-cursor-to-date t)))
     (message "%s" (jcalendar-date-string date))))
 
+(defun jcalendar--wareki-string (date)
+  (let ((era (ignore-errors (jcalendar--date-to-era date))))
+    (if era
+        (format "%s%s年"
+                (nth 0 era)
+                (jcalendar-number-to-和暦 
+                 (1+ (- (calendar-extract-year date)
+                        (calendar-extract-year (nth 1 era))))))
+      ;; TODO
+      "未対応")))
+
 (defun jcalendar-date-string (date)
-  (let* ((era (jcalendar--date-to-era date))
-         (year (calendar-extract-year date))
+  (let* ((year (calendar-extract-year date))
          (qreki (jcalendar--qreki date))
          (absolute (calendar-absolute-from-gregorian date)))
     (concat
-     (format "和暦: %s%s年"
-             (nth 0 era)
-             (jcalendar-number-to-kanji 
-              (1+ (- year (calendar-extract-year (nth 1 era))))))
+     (format "和暦: %s" (jcalendar--wareki-string date))
      (let* ((m (calendar-extract-month qreki))
             (d (calendar-extract-day qreki)))
        (format ", 旧暦: %s%s月%s日, 六曜: %s" 
@@ -268,7 +510,7 @@ See `jcalendar-special-days'"
      (let ((sekki (jcalendar--節気 absolute)))
        (and sekki
             (format ", 節気: %s" sekki)))
-     (format ", 十干: %s"
+     (format ", 六十干支: %s"
              (jcalendar--date-六十干支 absolute)))))
 
 ;; m1 は date 月の朔 m2 は date の次の朔
@@ -276,7 +518,7 @@ See `jcalendar-special-days'"
 ;; m1 ------------ m2 --------------
 ;; |      date    |
 
-;; m2 - m1 は 29 or 30
+;; m2 - m1 は 29 or 30 計算してみないと分からない
 
 (defun jcalendar--qreki (date)
   (let* ((absolute (calendar-absolute-from-gregorian date))
@@ -296,8 +538,14 @@ See `jcalendar-special-days'"
            (longitude (solar-date-next-longitude (calendar-astro-from-absolute saku) 30))
            (leap (>= (calendar-absolute-from-astro longitude) next-saku))
            (month (% (+ (round (solar-longitude longitude) 30) (if leap 0 1)) 12))
-           (day (floor (- absolute saku))))
-      (list (1+ month) (1+ day) nil leap))))
+           (day (floor (- absolute saku)))
+           (year (let* ((qm month)
+                        (m (calendar-extract-month date))
+                        (y (calendar-extract-year date)))
+                   (loop for i in '(0 1 -1)
+                         if (zerop (round (- (+ (/ (float m) 12) y) (+ (/ (float qm) 12) (+ y i)))))
+                         return (+ y i)))))
+      (list (1+ month) (1+ day) year leap))))
 
 (defconst jcalendar--節供
   '(("元日" 1 1)
@@ -331,17 +579,17 @@ See `jcalendar-special-days'"
 
 (defun jcalendar--六十干支 (n)
   "N の六十干支を返す。"
-  (let ((十干 (% n 10))
-	(十二支 (% n 12)))
+  (let ((jikkan (% n 10))
+	(eto (% n 12)))
     (concat 
-     (aref jcalendar--十干  十干) 
-     (aref jcalendar--十二支 十二支))))
+     (aref jcalendar--十干  jikkan) 
+     (aref jcalendar--十二支 eto))))
 
 (defun jcalendar--date-六十干支 (absolute)
   "ABSOLUTE (修正ユリウス通日) の六十干支を返す。"
   (jcalendar--六十干支 (+ absolute 14)))
 
-;;TODO いくらなんでもいらなくね？
+;;TODO いらないかな
 (defun jcalendar--year-六十干支 (year)
   "YEAR (西暦) の六十干支を返す。"
   (jcalendar--六十干支 (+ year 56)))
@@ -448,7 +696,11 @@ See `jcalendar-special-days'"
                (setq n1 (% n1 base)))
           finally return (concat (nreverse res)))))
 
-;; TODO ひのととか
+(defun jcalendar-number-to-和暦 (number)
+  (if (= number 1)
+      "元"
+    (jcalendar-number-to-kanji number)))
+
 
 ;;
 ;; inner functions
@@ -489,6 +741,14 @@ See `jcalendar-special-days'"
 
   (jcalendar--add-hook 'today-visible-calendar-hook 'jcalendar-mark-special-days)
   (jcalendar--add-hook 'today-invisible-calendar-hook 'jcalendar-mark-special-days))
+
+;; 月名は数字で読む。
+(defadvice calendar-read-date
+  (around jcalendar-read-date (&optional noday) activate)
+  (let ((calendar-month-name-array
+         (vconcat (loop for i from 1 to 12 
+                        collect (number-to-string i)))))
+    (setq ad-return-value ad-do-it)))
 
 (jcalendar--initialize)
 

@@ -13,12 +13,13 @@
 (ert-deftest jcalendar-leap ()
   ""
   :tags '(jcalendar)
-  (should (equal (jcalendar--qreki '(3 1 2014)) '(2 1 nil nil)))
-  (should (equal (jcalendar--qreki '(1 31 2014)) '(1 1 nil nil)))
-  (should (equal (jcalendar--qreki '(5 20 2012)) '(3 30 nil t)))
-  (should (equal (jcalendar--qreki '(5 21 2012)) '(4 1 nil nil)))
-  (should (equal (jcalendar--qreki '(4 20 2012)) '(3 30 nil nil)))
-  (should (equal (jcalendar--qreki '(4 21 2012)) '(3 1 nil t))))
+  (should (equal (jcalendar--qreki '(1 3 2013)) '(11 22 2012 nil)))
+  (should (equal (jcalendar--qreki '(3 1 2014)) '(2 1 2014 nil)))
+  (should (equal (jcalendar--qreki '(1 31 2014)) '(1 1 2014 nil)))
+  (should (equal (jcalendar--qreki '(5 20 2012)) '(3 30 2012 t)))
+  (should (equal (jcalendar--qreki '(5 21 2012)) '(4 1 2012 nil)))
+  (should (equal (jcalendar--qreki '(4 20 2012)) '(3 30 2012 nil)))
+  (should (equal (jcalendar--qreki '(4 21 2012)) '(3 1 2012 t))))
 
 (ert-deftest jcalendar-kansuji ()
   ""
